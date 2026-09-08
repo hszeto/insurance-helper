@@ -2,6 +2,25 @@
 
 Notable changes to this project.
 
+## [0.5.1] - 2026-09-05
+
+### Changed
+
+- **Summarising costs one Gemini call instead of two.** The query used to find a
+  document's overview passages is a frozen constant, so its vector is identical
+  on every upload — and was being fetched again for each one. It is now cached
+  for a week, keyed by the embedding model so a model change misses rather than
+  serving a vector from a different space.
+- For a small document that takes uploading from three calls to two.
+
+### Notes
+
+- Questions are still embedded every time, as they must be: each one is
+  different. The cache sits on the anchor path alone rather than behind a flag,
+  so a question cannot reach it, and a test asserts that.
+- This is the first sizeable value in the cache — 3072 floats in one key, where
+  everything else there is an integer counter.
+
 ## [0.5.0] - 2026-09-05
 
 ### Added
